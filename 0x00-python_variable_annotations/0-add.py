@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def add(a: float, b: float):
+def add(a: float, b: float) -> float:
     """
     Performs Addition
     a: The first argument of type float
