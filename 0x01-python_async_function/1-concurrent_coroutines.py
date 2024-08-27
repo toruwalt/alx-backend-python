@@ -8,7 +8,7 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """
-    Runs 
+    Runs an asynchronous loop within a function
 
     Arguments:
         n: Number of times to run loop (type int)
@@ -16,7 +16,6 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
 
     Returns:
         list_delay: A list of delays (type float)
-    
     """
     list_delay = [await wait_random(max_delay) for x in range(0, n)]
     list_delay.sort()
