@@ -2,8 +2,9 @@
 """Parameterize a unit test"""
 import requests
 import unittest
+from typing import Dict
 from parameterized import parameterized
-from unittest.mock  import patch
+from unittest.mock import patch, Mock
 
 access_nested_map = __import__('utils').access_nested_map
 get_json = __import__('utils').get_json
@@ -35,25 +36,15 @@ class TestGetJson(unittest.TestCase):
     """Mocks HTTP Calls"""
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
-        ("http://holberton.io", {"payload": False})
+        ("http://holberton.io", {"payload": False}),
     ])
-    
-    # @patch('utils.get_json')
-    # def test_get_json(self, url, mock_get, mock_expected):
-        # """Test method for getting JSON"""
-        
-        # mock_get.return_value = mock_expected
-
-        # test_payload = get_json(url)
-        # self.assertEqual(test_payload, mock_expected)
-    
-
-    @patch('utils.get_json')
-    def test_get_json(self, url, mock_expected, mock_get):
+    def test_get_json(
+            self,
+            test_url: str,
+            test_payload: Dict,
+            ) -> None:
         """Test method for getting JSON"""
-        mock_get.return_value = mock_expected
-
-        test_payload = get_json(url)
-
-        self.assertEqual(test_payload, mock_expected)
-
+        attrs = {'json.return_value': test_payload}
+        with patch("requests.get", return_value=Mock(**attrs)) as r_g:
+            self.assertEqual(get_json(test_url), test_payload)
+            r_g.assert_called_once_with(test_url)
