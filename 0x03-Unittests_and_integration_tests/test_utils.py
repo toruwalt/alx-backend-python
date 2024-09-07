@@ -50,6 +50,7 @@ class TestGetJson(unittest.TestCase):
             self.assertEqual(get_json(test_url), test_payload)
             r_g.assert_called_once_with(test_url)
 
+
 class TestMemoize(unittest.TestCase):
     """Tests the memoize function."""
     def test_memoize(self) -> None:
@@ -62,5 +63,10 @@ class TestMemoize(unittest.TestCase):
             @memoize
             def a_property(self):
                 return self.a_method()
-        with patch.object() as pear:
-            pass
+        with patch.object(TestClass, "a_method", returnvalue=42) as pear:
+            result1 = TestClass().a_property()
+            result2 = TestClass().a_property()
+
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+            pear.assert_called_once()
